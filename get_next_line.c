@@ -6,11 +6,11 @@
 /*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/22 13:10:10 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/22 19:59:29 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/22 21:18:01 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define BUFFER_SIZE 20
+#define BUFFER_SIZE 1
 #include <stdlib.h> ////////////////////////////////////////////////////////////
 #include <unistd.h> ////////////////////////////////////////////////////////////
 #include <stdio.h> ////////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@ int		my_read(int fd, char *buff, int size)
 char	*get_next_line(int fd)
 {
 	static char	buff[BUFFER_SIZE];
-	int	idx;
-	char	*line;
+	int			idx;
+	char		*line;
 
 	idx = my_chridx(buff, '\n');
 	if (idx >= 0)
@@ -48,13 +48,11 @@ char	*get_next_line(int fd)
 		line = my_idxdup(buff, BUFFER_SIZE - 1);
 	while (my_read(fd, buff, BUFFER_SIZE))
 	{
-		// printf("read into buffer: %s\n", buff);
+		// printf("read into buffer: %s [%d]\n", buff, my_strlen(buff));
 		idx = my_chridx(buff, '\n');
 		// printf("IDX: %d\n", idx);
-		if (idx >= 0 || my_strlen(buff) < BUFFER_SIZE)
+		if (idx >= 0)
 		{
-			if (my_strlen(buff) < BUFFER_SIZE)
-				idx = my_strlen(buff);
 			line = my_join(line, my_idxdup(buff, idx));
 			my_shift(buff, idx);
 			// printf("ret line = %s\n", line);
@@ -62,9 +60,14 @@ char	*get_next_line(int fd)
 			return (line);
 		}
 		else
-			line = my_join(line, buff);
+			line = my_join(line, my_idxdup(buff, my_strlen(buff)));
+			// if (my_strlen(buff) < BUFFER_SIZE)
+			// 	return (line);
 			// printf("line = %s\n", line);
 	}
+	buff[0] = '\0';
+	if (my_strlen(line))
+		return (line);
 	return (NULL);
 }
 
@@ -80,9 +83,9 @@ int	main()
 
 	printf("===============================================================\n");
 	fd = open("text", O_RDONLY);
-	// for (int i = 0; (ret = get_next_line(fd)) && i <= 20; i++)
-	while ((ret = get_next_line(fd)))
+	for (int i = 0; (ret = get_next_line(fd)) && i <= 40; i++)
+	// while ((ret = get_next_line(fd)))
 	{
-		printf("%s\n", ret);
+		printf(">>>>>>>>>>>>>>>> %s\n", ret);
 	}
 }
