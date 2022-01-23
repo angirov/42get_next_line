@@ -6,22 +6,15 @@
 /*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/22 13:10:10 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/22 21:18:01 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/23 14:18:04 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define BUFFER_SIZE 1
-#include <stdlib.h> ////////////////////////////////////////////////////////////
-#include <unistd.h> ////////////////////////////////////////////////////////////
-#include <stdio.h> ////////////////////////////////////////////////////////////
+#define BUFFER_SIZE 1 ////////////////////////////////////////////////////////
 
-char	*my_idxdup(const char *s, int idx);
-int		my_strlen(const char *s);
-int		my_chridx(const char *str, int c);
-void	my_shift(char *buff, int idx);
-char	*my_join(char const *s1, char const *s2);
+#include "get_next_line.h"
 
-int		my_read(int fd, char *buff, int size)
+int		ft_read(int fd, char *buff, int size)
 {
 	int	rd;
 
@@ -31,54 +24,56 @@ int		my_read(int fd, char *buff, int size)
 	return (rd);
 }
 
+
+// idx = ft_strchr_idx(buff, '\n');
+// 		// printf("IDX: %d\n", idx);
+// 		if (idx >= 0)
+// 		{
+// 			line = ft_join(line, ft_strdup_idx(buff, idx));
+// 			ft_shift(buff, idx);
+// 			// printf("ret line = %s\n", line);
+// 			// printf("save buff = %s\n", buff);
+// 			return (line);
+// 		}
+
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE];
-	int			idx;
+	static char	buff[BUFFER_SIZE + 1];
 	char		*line;
 
-	idx = my_chridx(buff, '\n');
-	if (idx >= 0)
+	if (ft_strchr_idx(buff, '\n') >= 0)
 	{
-		line = my_idxdup(buff, idx);
-		my_shift(buff, idx);
+		line = ft_strdup_idx(buff, ft_strchr_idx(buff, '\n')); //<<<<---------------------------------
+		ft_shift(buff, ft_strchr_idx(buff, '\n'));
 		return (line);
 	}
 	else if (*buff)
-		line = my_idxdup(buff, BUFFER_SIZE - 1);
-	while (my_read(fd, buff, BUFFER_SIZE))
+		line = ft_strdup_idx(buff, BUFFER_SIZE - 1); //<<<<---------------------------------
+	while (ft_read(fd, buff, BUFFER_SIZE))
 	{
-		// printf("read into buffer: %s [%d]\n", buff, my_strlen(buff));
-		idx = my_chridx(buff, '\n');
-		// printf("IDX: %d\n", idx);
-		if (idx >= 0)
+		if (ft_strchr_idx(buff, '\n') >= 0)
 		{
-			line = my_join(line, my_idxdup(buff, idx));
-			my_shift(buff, idx);
-			// printf("ret line = %s\n", line);
-			// printf("save buff = %s\n", buff);
+			line = ft_join(line, ft_strdup_idx(buff, ft_strchr_idx(buff, '\n'))); //<<<<---------------------------------
+			ft_shift(buff, ft_strchr_idx(buff, '\n'));
 			return (line);
 		}
 		else
-			line = my_join(line, my_idxdup(buff, my_strlen(buff)));
-			// if (my_strlen(buff) < BUFFER_SIZE)
-			// 	return (line);
-			// printf("line = %s\n", line);
+			line = ft_join(line, ft_strdup_idx(buff, ft_strlen(buff))); //<<<<---------------------------------v
 	}
 	buff[0] = '\0';
-	if (my_strlen(line))
+	if (ft_strlen(line))
 		return (line);
 	return (NULL);
 }
 
+// #define BUFFER_SIZE 1
+
 #include <fcntl.h>
-#include <unistd.h>
 #include <stdio.h>
 
 int	main()
 {
 	int	fd;
-	int	rd;
 	char	*ret;
 
 	printf("===============================================================\n");
