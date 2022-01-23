@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/23 17:55:14 by vangirov          #+#    #+#             */
+/*   Updated: 2022/01/23 18:46:07 by vangirov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 int	ft_strlen(const char *s)
@@ -13,114 +25,90 @@ int	ft_strlen(const char *s)
 	return (len);
 }
 
-int	ft_strchr_idx(const char *str, int c)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	int	len;
-	int	idx;
+	unsigned char	*td;
+	unsigned char	*ts;
+
+	if (dest == NULL && src == NULL)
+		return (NULL);
+	td = (unsigned char *)dest;
+	ts = (unsigned char *)src;
+	if (td < ts)
+		while (n--)
+			*td++ = *ts++;
+	else
+	{
+		td = td + n - 1;
+		ts = ts + n - 1;
+		while (n--)
+			*td-- = *ts--;
+	}
+	return (dest);
+}
+
+char	*ft_strchr(const char *str, int c)
+{
+	size_t	rest;
 	char	casted;
 
 	casted = (char)c;
-	len = ft_strlen(str);
-	idx = 0;
-	while (idx < len && str[idx] != casted)
+	rest = ft_strlen(str) + 1;
+	while (rest > 0 && *str != casted)
 	{
-		idx++;
+		rest--;
+		str++;
 	}
-	if (idx >= len)
-		return (-1);
-	return (idx);
+	if (rest)
+		return ((char *)str);
+	return (NULL);
 }
 
-void	ft_shift(char *buff, int idx)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int	i;
-
-	i = 0;
-	while (buff[idx + 1 + i])
-	{
-		buff[i] = buff[idx + 1 + i];
-		i++;
-	}
-	while (buff[i])
-	{
-		buff[i] = '\0';
-		i++;
-	}
-}
-
-// char	*ft_join(char *s1, char const *s2)
-// {
-// 	size_t	size;
-// 	char	*str;
-
-// 	if (!s1 || !s2)
-// 		return (0);
-// 	size = ft_strlen(s1) + ft_strlen(s2) + 1;
-// 	str = (char *)malloc(size);
-// 	if (str == NULL)
-// 		return (NULL);
-// 	while (*s1)
-// 		*str++ = *s1++;
-// 	free(s1);
-// 	while (*s2)
-// 		*str++ = *s2++;
-// 	*str = '\0';
-// 	return (str - size + 1);
-// }
-
-char	*ft_join(char *s1, char const *s2)
-{
+	size_t	size;
 	char	*str;
-	size_t	i;
-	size_t	j;
 
-	str = (char*)malloc(sizeof(*s1) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!str)
+	if (!s1 || !s2)
+		return (0);
+	size = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = (char *)malloc(size);
+	if (str == NULL)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1[i])
-	{
-		str[j++] = s1[i];
-		i++;
-	}
-	i = 0;
-	while (s2[i])
-	{
-		str[j++] = s2[i];
-		i++;
-	}
-	str[j] = 0;
-	return (str);
+	while (*s1)
+		*str++ = *s1++;
+	while (*s2)
+		*str++ = *s2++;
+	*str = '\0';
+	return (str - size + 1);
 }
 
-char	*ft_strdup_idx(const char *s, int idx)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	char	*dup;
-	int	i;
+	size_t	return_value;
 
-	dup = (char *)malloc(idx + 1);
-	if (dup == NULL)
-		return (NULL);
-	i = 0;
-	while (i < idx)
+	return_value = ft_strlen(src);
+	if (size > 0)
 	{
-		dup[i] = s[i];
-		i++;
+		while (size-- > 1 && *src)
+			*dst++ = *src++;
+		*dst = '\0';
 	}
-	dup[i] = '\0';
-	return (dup);
+	return (return_value);
 }
+
+///////////////////////////////////////////
 
 // #include <stdio.h>
 // int	main()
 // {
-// 	char	str[20] = "0123456789";
+// 	char	str[20] = "0123456789\nabcd";
+// 	char	*tail;
 
 // 	printf("%zu\n", sizeof(str));
-// 	printf(">%s\n", str + 9);
-// 	ft_shift(str, 9);
-// 	printf(">>%s\n", str);
+// 	tail = ft_get_tail(str);
+// 	printf("tail: %s\n", tail);
+// 	printf("buff: %s\n", str);
 // 	printf("%zu\n", sizeof(str));
 // 	// printf("%s\n", ft_idxdup(str, 3));
 // }
