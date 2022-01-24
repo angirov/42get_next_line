@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vangirov <vangirov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/23 10:35:36 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/23 18:49:52 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/24 21:19:41 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 char	*get_next_line(int fd);
 char	*ft_find_nl(char *line, char *buff);
-char	*ft_get_tail(char *buff);
+char	*ft_get_tail(char *line, char *buff);
 char	*ft_concat(char *line, char *nonl_buff);
 int		ft_read(int fd, char *buff, int size);
 

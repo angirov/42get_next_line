@@ -6,12 +6,13 @@
 /*   By: vangirov <vangirov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/22 13:10:10 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/24 18:41:54 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/24 21:31:50 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-char	*ft_get_tail(char *buff)
+
+char	*ft_get_tail(char *line, char *buff)
 {
 	int		len;
 	char	*tail;
@@ -19,17 +20,19 @@ char	*ft_get_tail(char *buff)
 
 	rest = ft_strchr(buff, '\n');
 	if (!rest)
-		return (buff);
+		return (ft_concat(line, buff));
 	rest++;
 	len = rest - buff;
 	tail = (char *)malloc(sizeof(char) * len + 1);
 	ft_strlcpy(tail, buff, len + 1);
 	len = ft_strlen(rest);
 	ft_memmove(buff, rest, len + 1);
-	return (tail);
+	line = ft_concat(line, tail);
+	free(tail);
+	return (line);
 }
 
-int		ft_read(int fd, char *buff, int size)
+int	ft_read(int fd, char *buff, int size)
 {
 	int	rd;
 
@@ -51,7 +54,6 @@ char	*get_next_line(int fd)
 {
 	static char	buff[BUFFER_SIZE + 1];
 	char		*line;
-	char		*tail;
 	int			rd;
 
 	if (fd < 0)
@@ -70,10 +72,7 @@ char	*get_next_line(int fd)
 			return (NULL);
 		}
 	}
-	tail = ft_get_tail(buff);
-	line = ft_concat(line, tail);
-	if (buff != tail)
-		free(tail);
+	line = ft_get_tail(line, buff);
 	return (line);
 }
 
