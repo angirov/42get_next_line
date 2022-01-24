@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vangirov <vangirov@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/22 13:10:10 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/24 21:31:50 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/24 21:59:01 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*get_next_line(int fd)
 {
 	static char	buff[BUFFER_SIZE + 1];
 	char		*line;
-	int			rd;
+	ssize_t		rd;
 
 	if (fd < 0)
 		return (NULL);
@@ -66,7 +66,7 @@ char	*get_next_line(int fd)
 		rd = ft_read(fd, buff, BUFFER_SIZE);
 		if (!rd && line[0])
 			break ;
-		if (!rd)
+		if (rd < 1)
 		{
 			free(line);
 			return (NULL);
