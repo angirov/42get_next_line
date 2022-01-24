@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vangirov <vangirov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/23 17:55:14 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/23 18:46:07 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/24 15:53:13 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	size;
 	char	*str;
+	int		i;
 
 	if (!s1 || !s2)
 		return (0);
@@ -75,12 +76,13 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str = (char *)malloc(size);
 	if (str == NULL)
 		return (NULL);
+	i = 0;
 	while (*s1)
-		*str++ = *s1++;
+		str[i++] = *s1++;
 	while (*s2)
-		*str++ = *s2++;
-	*str = '\0';
-	return (str - size + 1);
+		str[i++] = *s2++;
+	str[i] = '\0';
+	return (str);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)

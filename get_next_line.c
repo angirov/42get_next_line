@@ -3,15 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vangirov <vangirov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/22 13:10:10 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/23 21:56:24 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/24 18:41:54 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// #define BUFFER_SIZE 10 ////////////////////////////////////////////////////////
-// #include <stdio.h> ////////////////////////////////////////////////////////
 
 #include "get_next_line.h"
 char	*ft_get_tail(char *buff)
@@ -65,22 +62,16 @@ char	*get_next_line(int fd)
 	{
 		line = ft_concat(line, buff);
 		rd = ft_read(fd, buff, BUFFER_SIZE);
-		// printf("buff: %s\n", buff); ////////////////////////////////////////////////////////
-		// printf("rd: %d\n", rd); ////////////////////////////////////////////////////////
-		if (rd && rd < BUFFER_SIZE)
-		{
-			// printf("breaking\n"); ////////////////////////////////////////////////////////
+		if (!rd && line[0])
 			break ;
-		}
 		if (!rd)
+		{
+			free(line);
 			return (NULL);
+		}
 	}
-	// printf("buff: %s\n", buff); ////////////////////////////////////////////////////////
 	tail = ft_get_tail(buff);
-	// printf("tail: %s\n", tail); ////////////////////////////////////////////////////////
-	// printf("line: %s\n", line); ////////////////////////////////////////////////////////
 	line = ft_concat(line, tail);
-	// printf("line: %s\n", line); ////////////////////////////////////////////////////////
 	if (buff != tail)
 		free(tail);
 	return (line);
@@ -98,9 +89,13 @@ char	*get_next_line(int fd)
 
 // 	printf("===============================================================\n");
 // 	fd = open("text", O_RDONLY);
-// 	for (int i = 0; (ret = get_next_line(fd)) && i <= 22; i++)
-// 	// while ((ret = get_next_line(fd)))
+// 	// for (int i = 0; (ret = get_next_line(fd)) && i <= 22; i++)
+// 	while ((ret = get_next_line(fd)))
 // 	{
 // 		printf(">>>>>>>>>>>>>>>> %s", ret);
+// 		free(ret);
 // 	}
+// 	free(ret);
+// 	close(fd);
+// 	return (0);
 // }
