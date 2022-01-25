@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vangirov <vangirov@student.42wolfsburg.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/22 13:10:10 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/25 20:20:43 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/01/25 20:33:54 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_get_tail(char *line, char *buff)
 {
@@ -52,7 +52,7 @@ char	*ft_concat(char *line, char *nonl_buff)
 
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE + 1];
+	static char	buff[MAX_FD][BUFFER_SIZE + 1];
 	char		*line;
 	ssize_t		rd;
 
@@ -60,10 +60,10 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = (char *)malloc(1);
 	line[0] = '\0';
-	while (!ft_strchr(buff, '\n'))
+	while (!ft_strchr(buff[fd], '\n'))
 	{
-		line = ft_concat(line, buff);
-		rd = ft_read(fd, buff, BUFFER_SIZE);
+		line = ft_concat(line, buff[fd]);
+		rd = ft_read(fd, buff[fd], BUFFER_SIZE);
 		if (!rd && line[0])
 			break ;
 		if (rd < 1)
@@ -72,7 +72,7 @@ char	*get_next_line(int fd)
 			return (NULL);
 		}
 	}
-	line = ft_get_tail(line, buff);
+	line = ft_get_tail(line, buff[fd]);
 	return (line);
 }
 
