@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vangirov <vangirov@student.42wolfsburg.de> +#+  +:+       +#+        */
+/*   By: vangirov <vangirov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 22:14:42 by vangirov          #+#    #+#             */
-/*   Updated: 2022/01/25 22:14:45 by vangirov         ###   ########.fr       */
+/*   Updated: 2022/06/15 13:29:23 by vangirov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,19 @@ char	*get_next_line(int fd)
 
 	if (fd < 0)
 		return (NULL);
-	line = (char *)malloc(1);
-	line[0] = '\0';
+	line = (char *)malloc(sizeof(char));
+	line[0] = 0;
 	while (!ft_strchr(buff, '\n'))
 	{
 		line = ft_concat(line, buff);
 		rd = ft_read(fd, buff, BUFFER_SIZE);
-		if (!rd && line[0])
+		if (rd == 0 && line[0])
 			break ;
-		if (rd < 1)
-		{
-			free(line);
-			return (NULL);
-		}
+		if (rd <= 0)
+			{
+				free(line);
+				return (NULL);
+			}
 	}
 	line = ft_get_tail(line, buff);
 	return (line);
